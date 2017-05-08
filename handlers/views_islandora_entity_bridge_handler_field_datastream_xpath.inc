@@ -87,7 +87,7 @@ class views_islandora_entity_bridge_handler_field_datastream_xpath extends views
       list($this->view->entity_type, $this->view->entities) = $this->query->get_result_entities($values, !empty($this->relationship) ? $this->relationship : NULL, $this->field_alias);
     }
   }
-  
+
   function render($values) {
     $content = $this->options['datastream'];
     if (isset($this->view->entities[$this->view->row_index])) {
@@ -112,7 +112,10 @@ class views_islandora_entity_bridge_handler_field_datastream_xpath extends views
    */
   function generate_simplexml_with_namespace($xml) {
     $xml_object = new SimpleXMLElement($xml);
-    // @TODO: Figure out how to automatically add namespaces.
+    $ns = $xml_object->getDocNamespaces();
+    foreach ($ns as $prefix => $url) {
+        $xml_object->registerXPathNamespace($prefix, $url);
+    }
     return $xml_object;
   }
 }
